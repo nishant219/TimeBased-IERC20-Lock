@@ -158,12 +158,16 @@ contract HelloMeta is Ownable {
 
     // Pause the contract. Can only be called by the owner.
     function pause() external onlyOwner {
+        //check if already paused
+        require(!isPaused, "Contract is already paused");
         isPaused = true;
         emit Pause();
     }
 
     // Unpause the contract. Can only be called by the owner.
     function unpause() external onlyOwner {
+        //check if already unpaused
+        require(isPaused, "Contract is not paused");
         isPaused = false;
         emit Unpause();
     }
