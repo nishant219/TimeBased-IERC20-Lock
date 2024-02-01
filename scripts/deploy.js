@@ -43,7 +43,9 @@ async function main() {
     console.log("Deploying contracts with the account:", deployer.address);
 
     const HelloMeta = await ethers.getContractFactory("HelloMeta");
+
     const futureTimestamp = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7; // Current timestamp + 7 days
+    
     const helloMeta = await HelloMeta.deploy(futureTimestamp, deployer.address);
 
     // Access the contract's address directly
