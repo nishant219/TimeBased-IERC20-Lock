@@ -35,50 +35,54 @@ contract HelloMeta is Ownable {
     }
 
 
-// function deposit(uint256 amount, address token) external {
-//         require(amount > 0, "Deposit amount must be greater than 0");
-//         require(token != address(0), "Invalid token address");
-//         require(!isPaused, "Contract is paused");
+function deposit(uint256 amount, address token) external {
+    require(amount > 0, "Deposit amount must be greater than 0");
+    require(token != address(0), "Invalid token address");
+    require(!isPaused, "Contract is paused");
 
-//         // Assuming 'token' is an instance of the ERC-20 token contract
-//         IERC20 tokenContract = IERC20(token);
+    // Assuming 'token' is an instance of the ERC-20 token contract
+    IERC20 tokenContract = IERC20(token);
 
-//         // Check the user's token balance
-//         uint256 balance = tokenContract.balanceOf(msg.sender);
-//         require(balance >= amount, "Insufficient token balance");
+    // Check the user's token balance
+    uint256 balance = tokenContract.balanceOf(msg.sender);
+    require(balance >= amount, "Insufficient token balance");
 
-//         // Check the user's allowance
-//         uint256 allowance = tokenContract.allowance(msg.sender, address(this));
-//         require(allowance >= amount, "Insufficient allowance");
+    // Check the user's allowance
+    uint256 allowance = tokenContract.allowance(msg.sender, address(this));
+    require(allowance >= amount, "Insufficient allowance");
 
-//         // Assuming 'token' is an instance of the ERC-20 token contract
-//         //IERC20(token).approve(address(this), amount); // Approve the contract to spend tokens on behalf of the user
-//         tokenContract.approve(address(this), amount);
+    // Approve the contract to spend tokens on behalf of the user
+    bool isApproved = tokenContract.approve(address(this), amount);
+    require(isApproved, "Approval failed");
 
-//         // Transfer tokens from user to contract
-//         require(tokenContract.transferFrom(msg.sender, address(this), amount), "TransferFrom failed");
+    // Transfer tokens from user to contract using transferFrom
+    require(tokenContract.transferFrom(msg.sender, address(this), amount), "TransferFrom failed");
 
-//         // Update user funds
-//         _userFunds[msg.sender].tokenBalances[token] += amount; 
+    // Update user funds
+    _userFunds[msg.sender].tokenBalances[token] += amount; 
 
-//         emit Deposit(msg.sender, amount, token);
-// }
+    emit Deposit(msg.sender, amount, token);
+}
 
 
 
-    function deposit(uint256 amount, address token) external {
-        require(amount > 0, "Deposit amount must be greater than 0");
-        require(token != address(0), "Invalid token address");
-        require(!isPaused, "Contract is paused");
+    // function deposit(uint256 amount, address token) external {
+    //     require(amount > 0, "Deposit amount must be greater than 0");
+    //     require(token != address(0), "Invalid token address");
+    //     require(!isPaused, "Contract is paused");
 
-        // Transfer tokens from user to contract
-        IERC20(token).transferFrom(msg.sender, address(this), amount); // transferFrom is from ERC20  
+    //     // Assuming 'token' is an instance of the ERC-20 token contract
+    //     bool isApproved = IERC20(token).approve(address(this), amount); 
+    //     require(isApproved, "Approval failed");
 
-        // Update user funds
-        _userFunds[msg.sender].tokenBalances[token] += amount; 
+    //     // Transfer tokens from user to contract
+    //     IERC20(token).transferFrom(msg.sender, address(this), amount); // transferFrom is from ERC20  
 
-        emit Deposit(msg.sender, amount, token);
-    }
+    //     // Update user funds
+    //     _userFunds[msg.sender].tokenBalances[token] += amount; 
+
+    //     emit Deposit(msg.sender, amount, token);
+    // }
 
 
 
